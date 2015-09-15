@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Tip Calculator</string>
+    <string name="action_settings">Settings</string>
+    <string name="bill">Bill Total</string>
+    <string name="diez">10%</string>
+    <string name="quince">15%</string>
+    <string name="veinte">20%</string>
+    <string name="Tip1">Tip</string>
+    <string name="tip10">0.00</string>
+    <string name="tip15">0.00</string>
+    <string name="tip20">0.00</string>
+    <string name="total1">Total</string>
+    <string name="total10">0.00</string>
+    <string name="total15">0.00</string>
+    <string name="total20">0.00</string>
+    <string name="cust">Custom</string>
+    <string name="tip2">Tip</string>
+    <string name="tip">0.00</string>
+    <string name="total2">Total</string>
+    <string name="total">0.00</string>
+    <string name="pbar">25%</string>
+    <string name="billvalue">0</string>
+</resources>

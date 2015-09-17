@@ -4,12 +4,19 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.SeekBar;
+import android.widget.TextView;
+
+import java.text.DecimalFormat;
 
 public class MainActivity extends Activity {
 
+    TextView barTxt = (TextView) findViewById(R.id.bartxt);
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +34,7 @@ public class MainActivity extends Activity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 try {
+                    DecimalFormat df = new DecimalFormat("0.00");
                     EditText tip10 = (EditText) findViewById(R.id.tip10);
                     EditText tip15 = (EditText) findViewById(R.id.tip15);
                     EditText tip20 = (EditText) findViewById(R.id.tip20);
@@ -46,9 +54,9 @@ public class MainActivity extends Activity {
                     Double tot20d;
                     Double.parseDouble(tot20.getText().toString());
                     Double bill = Double.parseDouble(s.toString());
-                    tip10d = bill * .10;
+                    tip10d = bill * .1;
                     tip15d = bill * .15;
-                    tip20d = bill * .20;
+                    tip20d = bill * .2;
                     tot10d = bill + tip10d;
                     tot15d = bill + tip15d;
                     tot20d = bill + tip20d;
@@ -58,12 +66,12 @@ public class MainActivity extends Activity {
                     String t10 = tot10d.toString();
                     String t15 = tot15d.toString();
                     String t20 = tot20d.toString();
-                    tip10.setText(p10);
-                    tip15.setText(p15);
-                    tip20.setText(p20);
-                    tot10.setText(t10);
-                    tot15.setText(t15);
-                    tot20.setText(t20);
+                    tip10.setText(String.valueOf(df.format(p10)));
+                    tip15.setText(String.valueOf(df.format(p15)));
+                    tip20.setText(String.valueOf(df.format(p20)));
+                    tot10.setText(String.valueOf(df.format(t10)));
+                    tot15.setText(String.valueOf(df.format(t15)));
+                    tot20.setText(String.valueOf(df.format(t20)));
                 } catch (NumberFormatException e) {
                     vald[0] = 0.0;
                 }
@@ -80,7 +88,34 @@ public class MainActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        SeekBar barra = (SeekBar) findViewById(R.id.bar);
+        barra.setOnSeekBarChangeListener(barraListener);
         return true;
+    }
+
+    private SeekBar.OnSeekBarChangeListener barraListener = (new SeekBar.OnSeekBarChangeListener(){
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser){
+            valorBarra(progress);
+            barTxt.setText("" + progress + "%");
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+            int value = seekBar.getProgress();
+        }
+    });
+
+    private void valorBarra(int valorIncremento){
+        int newbarTxt = valorIncremento;
+        //if(newbarTxt > 0 && newbarTxt < 100) {
+          //  TextView.setText(barTxt, newbarTxt);
+        //}
     }
 
     @Override

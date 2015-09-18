@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,8 +16,6 @@ import java.text.DecimalFormat;
 
 public class MainActivity extends Activity {
 
-    TextView barTxt = (TextView) findViewById(R.id.bartxt);
-    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +33,7 @@ public class MainActivity extends Activity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 try {
-                    DecimalFormat df = new DecimalFormat("0.00");
+                    DecimalFormat df = new DecimalFormat("0.0#");
                     EditText tip10 = (EditText) findViewById(R.id.tip10);
                     EditText tip15 = (EditText) findViewById(R.id.tip15);
                     EditText tip20 = (EditText) findViewById(R.id.tip20);
@@ -42,17 +41,11 @@ public class MainActivity extends Activity {
                     EditText tot15 = (EditText) findViewById(R.id.tot15);
                     EditText tot20 = (EditText) findViewById(R.id.tot20);
                     Double tip10d;
-                    Double.parseDouble(tip10.getText().toString());
                     Double tip15d;
-                    Double.parseDouble(tip15.getText().toString());
                     Double tip20d;
-                    Double.parseDouble(tip20.getText().toString());
                     Double tot10d;
-                    Double.parseDouble(tot10.getText().toString());
                     Double tot15d;
-                    Double.parseDouble(tot15.getText().toString());
                     Double tot20d;
-                    Double.parseDouble(tot20.getText().toString());
                     Double bill = Double.parseDouble(s.toString());
                     tip10d = bill * .1;
                     tip15d = bill * .15;
@@ -60,18 +53,18 @@ public class MainActivity extends Activity {
                     tot10d = bill + tip10d;
                     tot15d = bill + tip15d;
                     tot20d = bill + tip20d;
-                    String p10 = tip10d.toString();
-                    String p15 = tip15d.toString();
-                    String p20 = tip20d.toString();
-                    String t10 = tot10d.toString();
-                    String t15 = tot15d.toString();
-                    String t20 = tot20d.toString();
-                    tip10.setText(String.valueOf(df.format(p10)));
-                    tip15.setText(String.valueOf(df.format(p15)));
-                    tip20.setText(String.valueOf(df.format(p20)));
-                    tot10.setText(String.valueOf(df.format(t10)));
-                    tot15.setText(String.valueOf(df.format(t15)));
-                    tot20.setText(String.valueOf(df.format(t20)));
+                    String p10 = df.format(tip10d);
+                    String p15 = df.format(tip15d);
+                    String p20 = df.format(tip20d);
+                    String t10 = df.format(tot10d);
+                    String t15 = df.format(tot15d);
+                    String t20 = df.format(tot20d);
+                    tip10.setText(String.valueOf(p10));
+                    tip15.setText(String.valueOf(p15));
+                    tip20.setText(String.valueOf(p20));
+                    tot10.setText(String.valueOf(t10));
+                    tot15.setText(String.valueOf(t15));
+                    tot20.setText(String.valueOf(t20));
                 } catch (NumberFormatException e) {
                     vald[0] = 0.0;
                 }
@@ -88,34 +81,29 @@ public class MainActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        SeekBar barra = (SeekBar) findViewById(R.id.bar);
-        barra.setOnSeekBarChangeListener(barraListener);
+        SeekBar bar = (SeekBar) findViewById(R.id.bar);
+        bar.setMax(100);
+        bar.setProgress(1);
+        bar.setOnSeekBarChangeListener(new barraListener());
         return true;
     }
 
-    private SeekBar.OnSeekBarChangeListener barraListener = (new SeekBar.OnSeekBarChangeListener(){
+    private class barraListener implements SeekBar.OnSeekBarChangeListener{
+
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser){
-            valorBarra(progress);
-            barTxt.setText("" + progress + "%");
+            TextView bartxt = (TextView) findViewById(R.id.bartxt);
+            Log.d("DEBUG", "Progress is " + progress);
+            bartxt.setText(progress+"%");
         }
 
         @Override
         public void onStartTrackingTouch(SeekBar seekBar) {
-
         }
 
         @Override
-        public void onStopTrackingTouch(SeekBar seekBar) {
-            int value = seekBar.getProgress();
-        }
-    });
+        public void onStopTrackingTouch(SeekBar seekBar) {}
 
-    private void valorBarra(int valorIncremento){
-        int newbarTxt = valorIncremento;
-        //if(newbarTxt > 0 && newbarTxt < 100) {
-          //  TextView.setText(barTxt, newbarTxt);
-        //}
     }
 
     @Override
